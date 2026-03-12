@@ -135,11 +135,12 @@
 
     /* Hero */
     .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: flex-start;
-      padding: 160px 48px 100px;
+      padding: 120px 48px 80px;
       position: relative;
       overflow: hidden;
     }
@@ -271,13 +272,15 @@
     .btn-secondary:hover .arrow { transform: translateX(4px); }
 
     .hero-stat-row {
-      position: relative;
+      position: absolute;
+      bottom: 60px;
+      left: 48px;
+      right: 48px;
       display: flex;
       align-items: center;
       gap: 0;
       border-top: 1px solid var(--border);
       padding-top: 40px;
-      margin-top: 80px;
       opacity: 0;
       animation: fadeUp 0.8s ease 1s forwards;
     }
@@ -722,13 +725,9 @@
 
     /* Scroll reveal */
     .reveal {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.hidden {
       opacity: 0;
       transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
     .reveal.visible {
       opacity: 1;
@@ -972,11 +971,11 @@
       </div>
 
       <div class="contact-links reveal reveal-delay-2">
-        <a href="/cdn-cgi/l/email-protection#c5a4b7b1acb6a4aba4a3a3aca9aca4b1a0a1e3e6f3f1fea2a8a4aca9eba6aaa8" class="contact-link">
+        <a href="mailto:artisanaffiliated&#64;gmail.com" class="contact-link">
           <span class="contact-link-label">Email</span>
           artisanaffiliated&#64;gmail.com
         </a>
-        <a href="/cdn-cgi/l/email-protection#1f7a73766c777e393c292b247e6d6b766c7e717e79797673767e6b7a7b317c7072" class="contact-link">
+        <a href="mailto:elisha&#64;artisanaffiliated.com" class="contact-link">
           <span class="contact-link-label">Founder</span>
           elisha&#64;artisanaffiliated.com
         </a>
@@ -994,7 +993,7 @@
     <div class="footer-copy">© 2025 Artisan Affiliated LLC — Chester County, PA</div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Custom cursor
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
@@ -1033,20 +1032,16 @@
       });
     });
 
-    // Scroll reveal - content visible by default, animate as enhancement
+    // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window) {
-      reveals.forEach(el => el.classList.add('hidden'));
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.remove('hidden');
-            e.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.08 });
-      reveals.forEach(el => observer.observe(el));
-    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
 
     // Waitlist
     function handleWaitlist() {
@@ -1058,4 +1053,11 @@
         document.getElementById('emailInput').placeholder = 'Please enter a valid email';
         setTimeout(() => {
           document.getElementById('emailInput').style.borderColor = '';
-          document.getElementById('emailInput').placeholder = 'your@resta
+          document.getElementById('emailInput').placeholder = 'your@restaurant.com';
+        }, 2000);
+        return;
+      }
+
+      // Store locally and show success
+      const entries = JSON.parse(localStorage.getItem('kae_waitlist') || '[]');
+      entries.push({ email, timestamp: new
