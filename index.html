@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stop The Beans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #050508;
+      color: #f0f0f0;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+    .grid {
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,255,71,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,255,71,0.04) 1px, transparent 1px);
+      background-size: 55px 55px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .alert {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #e03333;
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      font-weight: 500;
+      padding: 8px 20px;
+      display: flex; align-items: center; gap: 8px;
+      z-index: 10;
+      animation: apulse 2s ease-in-out infinite;
+    }
+    @keyframes apulse { 0%,100%{opacity:1} 50%{opacity:.75} }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #fff;
+      animation: blink 1s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    main {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 24px;
+      max-width: 600px; width: 100%;
+      margin-top: 40px;
+    }
+    .eyebrow {
+      font-size: 10px; letter-spacing: 0.25em; color: #e8ff47;
+      border: 1px solid rgba(232,255,71,0.3);
+      padding: 5px 14px; font-weight: 500;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 20vw, 140px);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+    }
+    h1 span { color: #e8ff47; }
+    .sub {
+      font-size: 16px; color: rgba(240,240,240,0.5);
+      line-height: 1.7; font-weight: 300;
+    }
+    .countdown {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    }
+    .unit {
+      background: #0d0d15;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: 2px solid #e8ff47;
+      padding: 14px 18px 10px;
+      min-width: 76px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px; line-height: 1; color: #e8ff47;
+    }
+    .lbl {
+      font-size: 9px; letter-spacing: 0.2em;
+      color: rgba(240,240,240,0.35); font-weight: 500;
+    }
+    .cta {
+      width: 100%;
+      background: #0d0d15;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: 2px solid #e03333;
+      padding: 28px 24px 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .cta p { font-size: 14px; color: rgba(240,240,240,0.5); line-height: 1.6; }
+    .cta p strong { color: #f0f0f0; font-weight: 500; }
+    .form { display: flex; width: 100%; max-width: 420px; }
+    input[type="email"] {
+      flex: 1;
+      background: #09090f;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-right: none;
+      color: #f0f0f0;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+    input[type="email"]::placeholder { color: rgba(240,240,240,0.2); }
+    input[type="email"]:focus { border-color: #e8ff47; }
+    button {
+      background: #e8ff47;
+      color: #050508;
+      border: none;
+      padding: 13px 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.88; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .fine { font-size: 11px; color: rgba(240,240,240,0.18); letter-spacing: 0.05em; }
+    .success {
+      display: none;
+      color: #e8ff47; font-size: 15px;
+      font-weight: 500; letter-spacing: 0.05em;
+      padding: 14px 0;
+    }
+    .error { color: #e03333; font-size: 12px; display: none; }
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 24px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      font-size: 9px; letter-spacing: 0.16em;
+      color: rgba(240,240,240,0.18);
+      background: #050508;
+      z-index: 10;
+    }
+    @media (max-width: 480px) {
+      .form { flex-direction: column; }
+      input[type="email"] { border-right: 1px solid rgba(255,255,255,0.1); border-bottom: none; }
+      button { width: 100%; }
+      .footer span:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grid"></div>
+
+  <div class="alert">
+    <div class="dot"></div>
+    INCIDENT DETECTED &nbsp;·&nbsp; ORIGIN: UNKNOWN &nbsp;·&nbsp; STATUS: ACTIVE
+  </div>
+
+  <main>
+    <div class="eyebrow">⚠ CLASSIFIED OPERATION</div>
+
+    <h1>STOP<br><span>THE</span><br>BEANS.</h1>
+
+    <p class="sub">
+      You've seen the video.<br>
+      You know what's at stake.<br>
+      The next incident drops in —
+    </p>
+
+    <div class="countdown">
+      <div class="unit"><div class="num" id="d">00</div><div class="lbl">DAYS</div></div>
+      <div class="unit"><div class="num" id="h">00</div><div class="lbl">HRS</div></div>
+      <div class="unit"><div class="num" id="m">00</div><div class="lbl">MIN</div></div>
+      <div class="unit"><div class="num" id="s">00</div><div class="lbl">SEC</div></div>
+    </div>
+
+    <div class="cta">
+      <p>Register your email to receive an <strong>emergency alert</strong> when beta drops.</p>
+
+      <div class="form" id="formWrap">
+        <input type="email" id="email" placeholder="your@email.com" />
+        <button onclick="subscribe()">ENLIST</button>
+      </div>
+
+      <div class="success" id="success">✓ &nbsp;You're registered. Stay vigilant.</div>
+      <div class="error" id="error">Something went wrong. Try again.</div>
+      <p class="fine">No spam. Just beans — or the prevention thereof.</p>
+    </div>
+  </main>
+
+  <div class="footer">
+    <span>OPERATION: BETA LAUNCH</span>
+    <span>CLEARANCE: PENDING</span>
+    <span>THREAT LEVEL: LEGUME</span>
+  </div>
+
+  <script>
+    // Countdown to May 14 2026 1PM
+    const end = new Date('2026-05-14T13:00:00');
+    const pad = n => String(n).padStart(2, '0');
+    function tick() {
+      const diff = end - new Date();
+      if (diff <= 0) { ['d','h','m','s'].forEach(id => document.getElementById(id).textContent = '00'); return; }
+      document.getElementById('d').textContent = pad(Math.floor(diff / 86400000));
+      document.getElementById('h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      document.getElementById('m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+      document.getElementById('s').textContent = pad(Math.floor((diff % 60000) / 1000));
+    }
+    tick(); setInterval(tick, 1000);
+
+    // Email submission — calls Formspree (free, no backend needed)
+    async function subscribe() {
+      const email = document.getElementById('email').value.trim();
+      const err = document.getElementById('error');
+      const suc = document.getElementById('success');
+      const btn = document.querySelector('button');
+      err.style.display = 'none';
+
+      if (!email || !email.includes('@')) {
+        err.textContent = 'Enter a valid email.';
+        err.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        if (res.ok) {
+          document.getElementById('formWrap').style.display = 'none';
+          suc.style.display = 'block';
+        } else {
+          throw new Error();
+        }
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'ENLIST';
+        err.textContent = 'Something went wrong. Try again.';
+        err.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
