@@ -1,255 +1,839 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stop The Beans</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #050508;
-      color: #f0f0f0;
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      overflow-x: hidden;
-    }
-    .grid {
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(232,255,71,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(232,255,71,0.04) 1px, transparent 1px);
-      background-size: 55px 55px;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .alert {
-      position: fixed; top: 0; left: 0; right: 0;
-      background: #e03333;
-      color: #fff;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      font-weight: 500;
-      padding: 8px 20px;
-      display: flex; align-items: center; gap: 8px;
-      z-index: 10;
-      animation: apulse 2s ease-in-out infinite;
-    }
-    @keyframes apulse { 0%,100%{opacity:1} 50%{opacity:.75} }
-    .dot {
-      width: 6px; height: 6px; border-radius: 50%; background: #fff;
-      animation: blink 1s ease-in-out infinite; flex-shrink: 0;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    main {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; gap: 24px;
-      max-width: 600px; width: 100%;
-      margin-top: 40px;
-    }
-    .eyebrow {
-      font-size: 10px; letter-spacing: 0.25em; color: #e8ff47;
-      border: 1px solid rgba(232,255,71,0.3);
-      padding: 5px 14px; font-weight: 500;
-    }
-    h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(80px, 20vw, 140px);
-      line-height: 0.88;
-      letter-spacing: 0.02em;
-    }
-    h1 span { color: #e8ff47; }
-    .sub {
-      font-size: 16px; color: rgba(240,240,240,0.5);
-      line-height: 1.7; font-weight: 300;
-    }
-    .countdown {
-      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-    }
-    .unit {
-      background: #0d0d15;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-top: 2px solid #e8ff47;
-      padding: 14px 18px 10px;
-      min-width: 76px;
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-    }
-    .num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 48px; line-height: 1; color: #e8ff47;
-    }
-    .lbl {
-      font-size: 9px; letter-spacing: 0.2em;
-      color: rgba(240,240,240,0.35); font-weight: 500;
-    }
-    .cta {
-      width: 100%;
-      background: #0d0d15;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-top: 2px solid #e03333;
-      padding: 28px 24px 20px;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-    }
-    .cta p { font-size: 14px; color: rgba(240,240,240,0.5); line-height: 1.6; }
-    .cta p strong { color: #f0f0f0; font-weight: 500; }
-    .form { display: flex; width: 100%; max-width: 420px; }
-    input[type="email"] {
-      flex: 1;
-      background: #09090f;
-      border: 1px solid rgba(255,255,255,0.1);
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artisan Affiliated</title>
+<meta name="description" content="A house for the primitives of human need. Built quietly, shipped deliberately." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Italiana&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #0e1b2e;
+    --navy-deep: #08111f;
+    --navy-soft: #18293f;
+    --gold: #c9a55a;
+    --gold-soft: #b08d3f;
+    --sky: #bcd4ea;
+    --sky-soft: #8fb4d1;
+    --paper: #f4ecd8;
+    --ink: #e8eef5;
+    --ink-muted: #a8b8cc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.8;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(201, 165, 90, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(143, 180, 209, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(8, 17, 31, 0.6) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0 0.35 0 0 0 0.08 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+  }
+
+  .page {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  /* HEADER */
+  header.masthead {
+    padding: 44px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(201, 165, 90, 0.25);
+    padding-bottom: 32px;
+  }
+
+  .mark {
+    font-family: 'Italiana', serif;
+    font-size: 22px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .est {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 180px 0 160px;
+    position: relative;
+    text-align: center;
+  }
+
+  .hero-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.2s forwards;
+  }
+
+  .hero-ornament .rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-ornament .diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--sky);
+    font-size: 17px;
+    letter-spacing: 0.12em;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.4s forwards;
+  }
+
+  h1.display {
+    font-family: 'Italiana', serif;
+    font-weight: 400;
+    font-size: clamp(52px, 8.5vw, 124px);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 0.6s forwards;
+  }
+
+  h1.display .gilded {
+    color: var(--gold);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.78em;
+    display: block;
+    margin-top: 20px;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+  }
+
+  .hero-blurb {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--ink-muted);
+    max-width: 620px;
+    margin: 0 auto;
+    font-style: italic;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 0.9s forwards;
+  }
+
+  .hero-blurb em {
+    color: var(--sky);
+    font-style: italic;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 1.4s forwards, gentle 3s ease-in-out 2.6s infinite;
+  }
+
+  .scroll-cue::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 32px;
+    background: var(--gold);
+    margin: 16px auto 0;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 128px 0;
+    position: relative;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto;
+    color: var(--gold);
+    padding: 32px 0;
+  }
+
+  .divider .rule {
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  .divider .ornament {
+    font-family: 'Italiana', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+  }
+
+  /* THESIS */
+  .thesis {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 96px;
+    align-items: start;
+  }
+
+  .thesis-label {
+    font-family: 'Italiana', serif;
+    font-size: 16px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    padding-top: 16px;
+    border-top: 1px solid var(--gold);
+    display: inline-block;
+  }
+
+  .thesis-body {
+    font-size: 26px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  .thesis-body .accent {
+    color: var(--sky);
+    font-style: italic;
+  }
+
+  .thesis-body p + p {
+    margin-top: 40px;
+  }
+
+  /* FOCAL POINTS */
+  .focal {
+    text-align: center;
+  }
+
+  .focal-heading {
+    font-family: 'Italiana', serif;
+    font-size: clamp(40px, 5vw, 64px);
+    color: var(--ink);
+    margin-bottom: 32px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+
+  .focal-intro {
+    font-style: italic;
+    color: var(--ink-muted);
+    max-width: 560px;
+    margin: 0 auto 96px;
+    font-size: 20px;
+    line-height: 1.7;
+  }
+
+  .quadrants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 880px;
+    margin: 0 auto;
+    border: 1px solid rgba(201, 165, 90, 0.3);
+    background: rgba(8, 17, 31, 0.35);
+  }
+
+  .quadrant {
+    padding: 64px 56px;
+    text-align: left;
+    border-right: 1px solid rgba(201, 165, 90, 0.3);
+    border-bottom: 1px solid rgba(201, 165, 90, 0.3);
+    position: relative;
+    transition: background 0.6s ease;
+  }
+
+  .quadrant:nth-child(2n) { border-right: none; }
+  .quadrant:nth-child(n+3) { border-bottom: none; }
+
+  .quadrant:hover {
+    background: rgba(188, 212, 234, 0.04);
+  }
+
+  .quadrant-numeral {
+    font-family: 'Italiana', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .quadrant-name {
+    font-family: 'Italiana', serif;
+    font-size: 32px;
+    color: var(--ink);
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+
+  .quadrant-text {
+    color: var(--ink-muted);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* PHILOSOPHY */
+  .philosophy {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .pull-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.55;
+    color: var(--ink);
+    position: relative;
+    padding: 64px 0;
+  }
+
+  .pull-quote::before,
+  .pull-quote::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .pull-quote::before { top: 0; }
+  .pull-quote::after { bottom: 0; }
+
+  .pull-quote .gilded {
+    color: var(--gold);
+  }
+
+  .pull-quote .sky {
+    color: var(--sky);
+  }
+
+  /* UNVEILING */
+  .unveiling {
+    text-align: center;
+    border-top: 1px solid rgba(201, 165, 90, 0.25);
+    border-bottom: 1px solid rgba(201, 165, 90, 0.25);
+    padding: 128px 0;
+    background: rgba(8, 17, 31, 0.5);
+    position: relative;
+  }
+
+  .unveiling .stamp {
+    font-family: 'Italiana', serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+
+  .unveiling h2 {
+    font-family: 'Italiana', serif;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--ink);
+    margin-bottom: 36px;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+
+  .unveiling h2 .gilded {
+    color: var(--gold);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .unveiling p {
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 20px;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* CONTACT */
+  .contact {
+    padding: 160px 0 100px;
+  }
+
+  .contact-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact h2 {
+    font-family: 'Italiana', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 64px);
+    color: var(--ink);
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+
+  .contact-sub {
+    font-style: italic;
+    color: var(--ink-muted);
+    margin-bottom: 72px;
+    font-size: 19px;
+    line-height: 1.7;
+  }
+
+  form {
+    text-align: left;
+  }
+
+  .field {
+    margin-bottom: 44px;
+    position: relative;
+  }
+
+  .field label {
+    display: block;
+    font-family: 'Italiana', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(201, 165, 90, 0.4);
+    padding: 12px 0;
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.4s ease;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--sky);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: rgba(168, 184, 204, 0.4);
+    font-style: italic;
+  }
+
+  .field textarea {
+    min-height: 140px;
+  }
+
+  .submit-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+  }
+
+  button.send {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Italiana', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 20px 64px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.5s ease;
+    overflow: hidden;
+  }
+
+  button.send::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateY(101%);
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    z-index: 0;
+  }
+
+  button.send span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s ease 0.1s;
+  }
+
+  button.send:hover::before {
+    transform: translateY(0);
+  }
+
+  button.send:hover span {
+    color: var(--navy-deep);
+  }
+
+  .form-status {
+    text-align: center;
+    margin-top: 36px;
+    font-style: italic;
+    color: var(--sky);
+    min-height: 24px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .form-status.visible {
+    opacity: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(201, 165, 90, 0.25);
+    padding: 44px 0 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  footer .seal {
+    font-family: 'Italiana', serif;
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes gentle {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 760px) {
+    .page { padding: 0 28px; }
+    .hero { padding: 100px 0 120px; }
+    .thesis { grid-template-columns: 1fr; gap: 40px; }
+    .quadrants { grid-template-columns: 1fr; }
+    .quadrant {
       border-right: none;
-      color: #f0f0f0;
-      padding: 13px 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      outline: none;
+      border-bottom: 1px solid rgba(201, 165, 90, 0.3);
+      padding: 48px 36px;
     }
-    input[type="email"]::placeholder { color: rgba(240,240,240,0.2); }
-    input[type="email"]:focus { border-color: #e8ff47; }
-    button {
-      background: #e8ff47;
-      color: #050508;
-      border: none;
-      padding: 13px 24px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    button:hover { opacity: 0.88; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .fine { font-size: 11px; color: rgba(240,240,240,0.18); letter-spacing: 0.05em; }
-    .success {
-      display: none;
-      color: #e8ff47; font-size: 15px;
-      font-weight: 500; letter-spacing: 0.05em;
-      padding: 14px 0;
-    }
-    .error { color: #e03333; font-size: 12px; display: none; }
-    .footer {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 10px 24px;
-      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-      font-size: 9px; letter-spacing: 0.16em;
-      color: rgba(240,240,240,0.18);
-      background: #050508;
-      z-index: 10;
-    }
-    @media (max-width: 480px) {
-      .form { flex-direction: column; }
-      input[type="email"] { border-right: 1px solid rgba(255,255,255,0.1); border-bottom: none; }
-      button { width: 100%; }
-      .footer span:last-child { display: none; }
-    }
-  </style>
+    .quadrant:last-child { border-bottom: none; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    header.masthead { flex-direction: column; gap: 12px; align-items: center; padding-bottom: 24px; }
+    .thesis-body { font-size: 21px; }
+    section { padding: 80px 0; }
+  }
+</style>
 </head>
 <body>
+  <div class="page">
 
-  <div class="grid"></div>
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div class="mark">Artisan Affiliated</div>
+      <div class="est">A house for the primitives of human need</div>
+    </header>
 
-  <div class="alert">
-    <div class="dot"></div>
-    INCIDENT DETECTED &nbsp;·&nbsp; ORIGIN: UNKNOWN &nbsp;·&nbsp; STATUS: ACTIVE
-  </div>
-
-  <main>
-    <div class="eyebrow">⚠ CLASSIFIED OPERATION</div>
-
-    <h1>STOP<br><span>THE</span><br>BEANS.</h1>
-
-    <p class="sub">
-      You've seen the video.<br>
-      You know what's at stake.<br>
-      The next incident drops in —
-    </p>
-
-    <div class="countdown">
-      <div class="unit"><div class="num" id="d">00</div><div class="lbl">DAYS</div></div>
-      <div class="unit"><div class="num" id="h">00</div><div class="lbl">HRS</div></div>
-      <div class="unit"><div class="num" id="m">00</div><div class="lbl">MIN</div></div>
-      <div class="unit"><div class="num" id="s">00</div><div class="lbl">SEC</div></div>
-    </div>
-
-    <div class="cta">
-      <p>Register your email to receive an <strong>emergency alert</strong> when beta drops.</p>
-
-      <div class="form" id="formWrap">
-        <input type="email" id="email" placeholder="your@email.com" />
-        <button onclick="subscribe()">ENLIST</button>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-ornament">
+        <span class="rule"></span>
+        <span class="diamond"></span>
+        <span class="rule"></span>
       </div>
+      <div class="eyebrow">A quiet announcement</div>
+      <h1 class="display">
+        The oldest questions,
+        <span class="gilded">answered new.</span>
+      </h1>
+      <p class="hero-blurb">
+        The world is returning to the things people <em>actually need</em>. What they eat. How they are kept safe. Who they can trust. We are building, deliberately, at those foundations.
+      </p>
+      <div class="scroll-cue">Read on</div>
+    </section>
 
-      <div class="success" id="success">✓ &nbsp;You're registered. Stay vigilant.</div>
-      <div class="error" id="error">Something went wrong. Try again.</div>
-      <p class="fine">No spam. Just beans — or the prevention thereof.</p>
+    <!-- THESIS -->
+    <section class="thesis reveal">
+      <div>
+        <span class="thesis-label">The Thesis</span>
+      </div>
+      <div class="thesis-body">
+        <p>
+          For seventy years, the most ambitious work in the world drifted upward. Into abstraction. Into services. Into things you could not hold.
+        </p>
+        <p>
+          That tide is turning. The questions that matter again are the <span class="accent">oldest ones</span>. What nourishes us. What protects us. What we can believe.
+        </p>
+        <p>
+          We exist to answer them, with the speed of the new century and the discipline of an older one.
+        </p>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider">
+      <span class="rule"></span>
+      <span class="ornament">⁘</span>
+      <span class="rule"></span>
     </div>
-  </main>
 
-  <div class="footer">
-    <span>OPERATION: BETA LAUNCH</span>
-    <span>CLEARANCE: PENDING</span>
-    <span>THREAT LEVEL: LEGUME</span>
+    <!-- FOCAL POINTS -->
+    <section class="focal reveal">
+      <h2 class="focal-heading">Four foundations.</h2>
+      <p class="focal-intro">Not a portfolio of interests. The primitives every person shares, and where the next century will be built.</p>
+
+      <div class="quadrants">
+        <div class="quadrant">
+          <div class="quadrant-numeral">I</div>
+          <div class="quadrant-name">Sustenance</div>
+          <div class="quadrant-text">What people eat, and how it reaches them. The first beachhead, and the one closest to our hearts.</div>
+        </div>
+        <div class="quadrant">
+          <div class="quadrant-numeral">II</div>
+          <div class="quadrant-name">Defense</div>
+          <div class="quadrant-text">Protection of body, of border, of the people we are responsible to. The oldest craft, reimagined.</div>
+        </div>
+        <div class="quadrant">
+          <div class="quadrant-numeral">III</div>
+          <div class="quadrant-name">Sovereignty</div>
+          <div class="quadrant-text">Shelter, identity, the right to be one's own. The foundations of a private life in a public century.</div>
+        </div>
+        <div class="quadrant">
+          <div class="quadrant-numeral">IV</div>
+          <div class="quadrant-name">Trust</div>
+          <div class="quadrant-text">The ability to speak, be heard, and be believed. The invisible architecture of every human exchange.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider">
+      <span class="rule"></span>
+      <span class="ornament">⁘</span>
+      <span class="rule"></span>
+    </div>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy reveal">
+      <div class="pull-quote">
+        We do not chase the <span class="gilded">future</span>. We build, with care, what feels <span class="sky">inevitable</span>, and ship it before anyone else thought it could be shipped at all.
+      </div>
+    </section>
+
+    <!-- UNVEILING -->
+    <section class="unveiling reveal">
+      <div class="stamp">In preparation</div>
+      <h2>The first works are <span class="gilded">forthcoming.</span></h2>
+      <p>What we are building will be revealed as it is ready, never before. If you would like to be among the first to know, write to us.</p>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact reveal" id="contact">
+      <div class="contact-inner">
+        <h2>Correspondence.</h2>
+        <p class="contact-sub">We read every note.</p>
+
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="As you would like to be addressed" required />
+          </div>
+          <div class="field">
+            <label for="email">Where we may reach you</label>
+            <input type="email" id="email" name="email" placeholder="your@address.com" required />
+          </div>
+          <div class="field">
+            <label for="affiliation">Your work, briefly</label>
+            <input type="text" id="affiliation" name="affiliation" placeholder="Operator, investor, builder, friend" />
+          </div>
+          <div class="field">
+            <label for="message">Your note</label>
+            <textarea id="message" name="message" placeholder="What brings you here?" required></textarea>
+          </div>
+          <div class="submit-row">
+            <button type="submit" class="send"><span>Send</span></button>
+          </div>
+          <div class="form-status" id="formStatus"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="seal">Artisan Affiliated</div>
+      <div>Made with patience. &copy; 2026.</div>
+    </footer>
+
   </div>
 
-  <script>
-    // Countdown to May 14 2026 1PM
-    const end = new Date('2026-05-14T13:00:00');
-    const pad = n => String(n).padStart(2, '0');
-    function tick() {
-      const diff = end - new Date();
-      if (diff <= 0) { ['d','h','m','s'].forEach(id => document.getElementById(id).textContent = '00'); return; }
-      document.getElementById('d').textContent = pad(Math.floor(diff / 86400000));
-      document.getElementById('h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
-      document.getElementById('m').textContent = pad(Math.floor((diff % 3600000) / 60000));
-      document.getElementById('s').textContent = pad(Math.floor((diff % 60000) / 1000));
-    }
-    tick(); setInterval(tick, 1000);
-
-    // Email submission — calls Formspree (free, no backend needed)
-    async function subscribe() {
-      const email = document.getElementById('email').value.trim();
-      const err = document.getElementById('error');
-      const suc = document.getElementById('success');
-      const btn = document.querySelector('button');
-      err.style.display = 'none';
-
-      if (!email || !email.includes('@')) {
-        err.textContent = 'Enter a valid email.';
-        err.style.display = 'block';
-        return;
+<script>
+  // Scroll-triggered reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
       }
+    });
+  }, { threshold: 0.12 });
 
-      btn.disabled = true;
-      btn.textContent = '...';
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-      try {
-        const res = await fetch('https://formspree.io/f/maqvyelk', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ email })
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const status = document.getElementById('formStatus');
+  const submitButton = form.querySelector('button.send');
+  const originalButtonText = submitButton.querySelector('span').textContent;
+
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mpqbnenl';
+
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    affiliation: form.affiliation.value,
+    message: form.message.value,
+    _subject: 'New correspondence from artisanaffiliated.com'
+  };
+
+  submitButton.disabled = true;
+  submitButton.querySelector('span').textContent = 'Sending';
+  status.classList.remove('visible');
+
+  fetch(FORMSPREE_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => {
+      if (response.ok) {
+        status.textContent = 'Thank you. We have your note.';
+        status.style.color = 'var(--sky)';
+        status.classList.add('visible');
+        form.reset();
+      } else {
+        return response.json().then(err => {
+          throw new Error(err.error || 'Submission failed');
         });
-
-        if (res.ok) {
-          document.getElementById('formWrap').style.display = 'none';
-          suc.style.display = 'block';
-        } else {
-          throw new Error();
-        }
-      } catch {
-        btn.disabled = false;
-        btn.textContent = 'ENLIST';
-        err.textContent = 'Something went wrong. Try again.';
-        err.style.display = 'block';
       }
-    }
-  </script>
+    })
+    .catch(error => {
+      status.textContent = 'Something went wrong. Please try again, or write to us directly.';
+      status.style.color = 'var(--gold)';
+      status.classList.add('visible');
+      console.error('Formspree error:', error);
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.querySelector('span').textContent = originalButtonText;
+      setTimeout(() => status.classList.remove('visible'), 8000);
+    });
+}
+</script>
 </body>
 </html>
